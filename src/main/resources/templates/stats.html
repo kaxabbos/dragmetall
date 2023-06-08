@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Аналитическая панель</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body style="background-position: 0 -60px;">
+<div th:insert="blocks/nav :: nav"></div>
+
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row mb-4 mb-lg-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h1>Аналитическая панель</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" hidden>
+                <p th:text="${active}" id="active"></p>
+                <p th:text="${des}" id="des"></p>
+            </div>
+            <div class="col-12">
+                <div id="status1" style="width: 100%; height: 500px;"></div>
+            </div>
+            <div class="row">
+                <div class="col"><p class="lead" th:text="${names[0]}" id="names0"></p></div>
+                <div class="col"><p class="lead" th:text="${names[1]}" id="names1"></p></div>
+                <div class="col"><p class="lead" th:text="${names[2]}" id="names2"></p></div>
+                <div class="col"><p class="lead" th:text="${names[3]}" id="names3"></p></div>
+                <div class="col"><p class="lead" th:text="${names[4]}" id="names4"></p></div>
+                <div class="col"><p class="lead" th:text="${names[5]}" id="names5"></p></div>
+            </div>
+            <div class="row">
+                <div class="col"><p class="lead" th:text="${quantities[0]}" id="quantities0"></p></div>
+                <div class="col"><p class="lead" th:text="${quantities[1]}" id="quantities1"></p></div>
+                <div class="col"><p class="lead" th:text="${quantities[2]}" id="quantities2"></p></div>
+                <div class="col"><p class="lead" th:text="${quantities[3]}" id="quantities3"></p></div>
+                <div class="col"><p class="lead" th:text="${quantities[4]}" id="quantities4"></p></div>
+                <div class="col"><p class="lead" th:text="${quantities[5]}" id="quantities5"></p></div>
+            </div>
+            <div class="col-12">
+                <div id="quantity" style="width: 100%; height: 500px;"></div>
+            </div>
+            <div class="col-12">
+                <div id="status2" style="width: 100%; height: 500px;"></div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col">
+                <h1 style="font-size: 24px;">Название</h1>
+            </div>
+            <div class="col">
+                <h1 style="font-size: 24px;">Количество драгметаллов</h1>
+            </div>
+        </div>
+        <div style="font-size: 1.5em" th:each="equipment : ${departments}" class="row">
+            <div class="col"><span th:text="${equipment.name}"></span></div>
+            <div class="col"><span th:text="${equipment.countQuantity()}"></span></div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {packages: ['corechart']});
+    google.charts.setOnLoadCallback(drawStatus1);
+    google.charts.setOnLoadCallback(drawStatus2);
+    google.charts.setOnLoadCallback(drawQuantity);
+
+    function drawStatus1() {
+        var active = parseInt(document.querySelector('#active').textContent);
+        var des = parseInt(document.querySelector('#des').textContent);
+        var data = google.visualization.arrayToDataTable([
+            ['Состояние', 'Количество', {role: 'style'}, {role: 'annotation'}],
+            ['Активно', active, "green", active],
+            ['Утилизировано', des, "brown", des],
+        ]);
+
+        var options = {
+            title: 'Состояние оборудований',
+            hAxis: {title: 'Состояние'},
+            vAxis: {title: 'Количество'},
+            bar: {groupWidth: "80%"},
+            legend: {position: "none"}
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById('status1'));
+        chart.draw(data, options);
+    }
+
+    function drawStatus2() {
+        var active = parseInt(document.querySelector('#active').textContent);
+        var des = parseInt(document.querySelector('#des').textContent);
+        var data = google.visualization.arrayToDataTable([
+            ['Состояние', 'Количество'],
+            ['Активно', active],
+            ['Утилизировано', des],
+        ]);
+
+        var options = {
+            title: 'Состояние оборудований',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('status2'));
+        chart.draw(data, options);
+    }
+
+    function drawQuantity() {
+        var names0 = document.querySelector('#names0').textContent;
+        var names1 = document.querySelector('#names1').textContent;
+        var names2 = document.querySelector('#names2').textContent;
+        var names3 = document.querySelector('#names3').textContent;
+        var names4 = document.querySelector('#names4').textContent;
+        var names5 = document.querySelector('#names5').textContent;
+        var quantities0 = parseInt(document.querySelector('#quantities0').textContent);
+        var quantities1 = parseInt(document.querySelector('#quantities1').textContent);
+        var quantities2 = parseInt(document.querySelector('#quantities2').textContent);
+        var quantities3 = parseInt(document.querySelector('#quantities3').textContent);
+        var quantities4 = parseInt(document.querySelector('#quantities4').textContent);
+        var quantities5 = parseInt(document.querySelector('#quantities5').textContent);
+        var data = google.visualization.arrayToDataTable([
+            ['Категория', 'Количество'],
+            [names0, quantities0],
+            [names1, quantities1],
+            [names2, quantities2],
+            [names3, quantities3],
+            [names4, quantities4],
+            [names5, quantities5],
+        ]);
+
+        var options = {
+            title: 'Количество оборудований по категориям',
+            pieHole: 0.4,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('quantity'));
+        chart.draw(data, options);
+    }
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bold-and-bright.js"></script>
+</body>
+
+</html>

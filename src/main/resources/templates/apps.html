@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Заявки</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<nav th:insert="blocks/nav :: nav"></nav>
+
+<section class="py-5">
+    <div class="container py-5">
+        <div th:if="${message}" class="row mb-4 mb-lg-5">
+            <div class="alert col-md-8 col-xl-6 text-center mx-auto alert-warning" role="alert">
+                <strong th:text="${message}"></strong>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h1 class="text-center">Заявки</h1>
+            </div>
+        </div>
+        <hr>
+        <div class="row text-center">
+            <div class="col"><span>Оборудования</span></div>
+            <div class="col-2"></div>
+        </div>
+        <hr>
+        <div th:each="apps : ${apps}" class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-auto text-center">
+                        <img th:src="'/img/' + ${apps.equipment.img}" style="width: 200px;border-radius: 25px;">
+                    </div>
+                    <div class="col-auto">
+                        <div>
+                            <span>Название:&nbsp;</span>
+                            <span th:text="${apps.equipment.name}"></span>
+                        </div>
+                        <div>
+                            <span>Ответственный:&nbsp;</span>
+                            <span th:text="${apps.user.fio}"></span>
+                        </div>
+                        <div>
+                            <span>Количество драгметаллов:&nbsp;</span>
+                            <span th:text="${apps.equipment.quantity}"></span>
+                        </div>
+                        <div>
+                            <span>Категория:&nbsp;</span>
+                            <span th:text="${apps.equipment.category.name}"></span>
+                        </div>
+                        <div>
+                            <span>Дата регистрации:&nbsp;</span>
+                            <span th:text="${apps.equipment.date}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 text-center">
+                <div class="row">
+                    <div class="col mb-2">
+                        <a style="width: 100%" class="btn btn-primary" role="button"
+                           th:href="'/apps/conf/' + ${apps.id}">Утилизировать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bold-and-bright.js"></script>
+
+</body>
+
+</html>

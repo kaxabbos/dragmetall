@@ -1,0 +1,26 @@
+<div th:fragment="nav">
+    <nav style="font-size: 1.5em; background: #ccc" class="navbar navbar-light navbar-expand-md sticky-top navbar-shrink py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span>dragmetall</span>
+            </a>
+            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
+                <span class="visually-hidden">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav mx-auto">
+                    <li th:if="${user.role.name() == 'ADMIN' and inStock > 0}" class="nav-item"><a class="nav-link" href="/stats">Аналитическая панель</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="/equipment/all">Учет драгоценных металлов</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/department">Отделы</a></li>
+                    <li th:if="${user.role.name() == 'MANAGER'}" class="nav-item"><a class="nav-link" href="/apps">Заявки</a></li>
+                    <li th:if="${user.role.name() == 'ADMIN'}" class="nav-item"><a class="nav-link" href="/user/all">Пользователи</a></li>
+                    <li th:if="${user.role.name() == 'MANAGER'}" class="nav-item"><a class="nav-link" href="/equipment/add">Пополнить базу</a></li>
+                    <li th:if="${user.role.name() == 'MANAGER'}" class="nav-item"><a class="nav-link" href="/department/add">Новый отдел</a></li>
+                    <li th:if="${user.role.name() != 'NOT'}" class="nav-item"><a class="nav-link" href="/logout">Выход</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

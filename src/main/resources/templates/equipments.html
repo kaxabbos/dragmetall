@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Учет драгоценных металлов</title>
+</head>
+
+<head th:insert="blocks/head :: head"></head>
+
+<body>
+
+<nav th:insert="blocks/nav :: nav"></nav>
+
+<section class="py-5">
+    <div class="container py-5">
+        <div class="row mb-4 mb-lg-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="fw-bold">Учет драгоценных металлов</h2>
+            </div>
+        </div>
+        <hr>
+        <form class="text-center" action="/equipment/search" method="post">
+            <div class="row">
+                <div class="col-auto">
+                    <a class="btn btn-info" role="button" href="/equipment/all">Сброс</a>
+                </div>
+                <div class="col">
+                    <input th:value="${input}" class="form-control" type="text" name="search" placeholder="Поиск">
+                </div>
+                <div class="col">
+                    <select class="form-select" name="departmentId" required>
+                        <option th:each="w :  ${departments}" th:value="${w.id}"
+                                th:label="${w.name}" th:selected="${w.id == selectedW}"></option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-select" name="category" required>
+                        <option th:each="category :  ${categories}" th:value="${category}"
+                                th:label="${category.getName()}" th:selected="${category == selectedCategory}"></option>
+                    </select>
+                </div>
+                <div class="col">
+                    <select class="form-select" name="desk" required>
+                        <option value="cheap">По возрастанию драгметаллов</option>
+                        <option value="expensive">По убыванию драгметаллов</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Найти</button>
+                </div>
+            </div>
+        </form>
+        <hr>
+        <form th:each="equipment : ${equipments}" style="margin-bottom: 10px;">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-auto text-center">
+                            <img th:src="'/img/' + ${equipment.img}" style="width: 200px;border-radius: 25px;"></div>
+                        <div class="col">
+                            <div><span>Название:&nbsp;</span><span th:text="${equipment.name}"></span></div>
+                            <div><span>Статус:&nbsp;</span><span th:text="${equipment.status.name}"></span></div>
+                            <div><span>Категория:&nbsp;</span><a th:text="${equipment.category.getName()}"
+                                                                 th:href="'/equipment/category/' + ${equipment.category.name()}"></a>
+                            </div>
+                            <div><span>Серийный номер:&nbsp;</span><span th:text="${equipment.serial}"></span></div>
+                            <div><span>Инвентарный номер:&nbsp;</span><span th:text="${equipment.inv}"></span></div>
+                            <div><span>Количество драгметаллов:&nbsp;</span><span th:text="${equipment.quantity}"></span></div>
+                            <div><span>Поставщик:&nbsp;</span><span th:text="${equipment.provider}"></span></div>
+                            <div><span>Отдел:&nbsp;</span> <a th:href="${'/equipment/department/' + equipment.department.id}"
+                                                              th:text="${equipment.department.name}"></a></div>
+                            <div><span>Вес оборудования:&nbsp;</span><span th:text="${equipment.weight}"></span></div>
+                            <div><span>Дата регистрации:&nbsp;</span><span th:text="${equipment.date}"></span></div>
+                            <div th:if="${equipment.description != ''}"><span>Описание:&nbsp;</span><span
+                                    th:text="${equipment.description}"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${user.role.name() != 'ADMIN'}"
+                     class="col-4 text-center">
+                    <div th:if="${user.role.name() == 'EMPLOYEE' and equipment.status.name() == 'ACTIVE'}" class="row">
+                        <div class="col">
+                            <a th:href="'/apps/add/' + ${equipment.id}" class="btn btn-primary" style="width: 100%">Утилизировать</a>
+                        </div>
+                    </div>
+                    <div th:if="${user.role.name() == 'MANAGER'}" class="row">
+                        <div class="col text-center">
+                            <a class="btn btn-success" role="button" style="width: 100%;"
+                               th:href="'/equipment/edit/' + ${equipment.id}">Редактировать</a>
+                        </div>
+                        <div class="col text-center">
+                            <a class="btn btn-danger" role="button" style="width: 100%"
+                               th:href="'/equipment/delete/' + ${equipment.id}">Удалить</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </form>
+    </div>
+</section>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/bold-and-bright.js"></script>
+</body>
+
+</html>
